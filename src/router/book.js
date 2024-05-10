@@ -41,8 +41,8 @@ const book = new Cbook()
  *       - Book
  * /api/book/borrow/{book_code}:
  *   post:
- *     summary: Mendapatkan data
- *     description: Mendapatkan data yang membutuhkan token pada header request.
+ *     summary: Meminjam Buku
+ *     description: 
  *     parameters:
  *       - in: header
  *         name: authMember
@@ -67,8 +67,34 @@ const book = new Cbook()
  *       - Book
  * /api/book/borrow/return/{id}:
  *   post:
- *     summary: Mendapatkan data
- *     description: Mendapatkan data yang membutuhkan token pada header request.
+ *     summary: Mengembalikan buku
+ *     description:
+ *     parameters:
+ *       - in: header
+ *         name: authMember
+ *         description: Masukan member code
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         description: Masukan book code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK. Data berhasil diambil.
+ *       401:
+ *         description: Unauthorized. Token tidak valid atau tidak ada token yang disertakan.
+ *     security:
+ *       - ApiKeyAuth: []
+ *     tags:
+ *       - Book
+ * /api/book/loans:
+ *   get:
+ *     summary: Mendapatkan data loans
+ *     description: 
  *     parameters:
  *       - in: header
  *         name: authMember
@@ -94,6 +120,7 @@ const book = new Cbook()
  */
 Router
     .get('/', book.get)
+    .get('/loans', book.getLoans)
     .post('/borrow/:book_code', book.borrow)
     .post('/borrow/return/:id', book.returnBook)
 

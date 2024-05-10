@@ -14,6 +14,15 @@ class book {
         })
     }
 
+    getLoans () {
+        return new Promise((resolve, reject) => {
+            this.db.query('SELECT * FROM loans_book', (err, res) => {
+                if (err) return reject(err)
+                resolve(res)
+            })
+        })
+    }
+
     borrow (data) {
         return new Promise((resolve, reject) => {
             this.db.query('INSERT INTO loans_book SET ?', data, (err, res) => {
