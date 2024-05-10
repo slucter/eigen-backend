@@ -1,3 +1,40 @@
+-- be_test_eigen.books definition
+
+CREATE TABLE `books` (
+  `code` varchar(10) NOT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `author` varchar(20) DEFAULT NULL,
+  `stock` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- be_test_eigen.`member` definition
+
+CREATE TABLE `member` (
+  `code` varchar(10) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `is_penalty` tinyint(1) NOT NULL DEFAULT '0',
+  `count_loan_book` int NOT NULL DEFAULT '0',
+  `penalty_date` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- be_test_eigen.loans_book definition
+
+CREATE TABLE `loans_book` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `member_code` varchar(10) DEFAULT NULL,
+  `book_code` varchar(10) DEFAULT NULL,
+  `borrowed_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_member_code` (`member_code`),
+  KEY `fk_book_code` (`book_code`),
+  CONSTRAINT `fk_book_code` FOREIGN KEY (`book_code`) REFERENCES `books` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `fk_member_code` FOREIGN KEY (`member_code`) REFERENCES `member` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE DEFINER=`root`@`localhost` TRIGGER `loan_update` AFTER INSERT ON `loans_book` FOR EACH ROW BEGIN
     UPDATE member
     SET count_loan_book = count_loan_book + 1
